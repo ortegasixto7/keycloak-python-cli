@@ -27,6 +27,28 @@ python -m pip install -e .
   Jira ticket identifier used only for display in the boxed command output header.
 - `--log-file <path>`
   Path to the log file (default: `kc.log`).
+- `--cmd-file <path>`
+  Execute commands from a text file (one CLI line per line; lines starting with `#` are ignored).
+- `--continue-on-error`
+  When used with `--cmd-file`, continue processing remaining lines even if a command fails (default: stop on first error).
+
+### Batch execution from file
+- Example file `commands.txt`:
+  ```text
+  # List realms
+  realms list
+
+  # Create then delete a role
+  roles create --realm master --name example_role --description "Example role from batch"
+  roles delete --realm master --name example_role --ignore-missing
+  ```
+- Run:
+  ```bash
+  kc --config config.json --cmd-file commands.txt
+  # or continue even if a command fails
+  kc --config config.json --cmd-file commands.txt --continue-on-error
+  ```
+Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the file.
 
 ## Commands and examples
 

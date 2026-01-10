@@ -1,0 +1,7 @@
+# Example batch commands for kc CLI
+# Lines starting with # are comments and are ignored.
+# Adjust realms/values as needed.
+
+realms list
+roles create --realm master --name example_role --description "Example role from batch"
+roles delete --realm master --name example_role --ignore-missing

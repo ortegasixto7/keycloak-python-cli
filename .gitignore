@@ -28,7 +28,6 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
-kc
 *.log
 *.csv
 config.json
