@@ -4,10 +4,10 @@
 CLI to interact with Keycloak.
 
 ## Usage
-Install the project and run the `kc` command to see the general help.
+Install the project and run the `kc.exe` command to see the general help.
 
 ```bash
-kc --help
+kc.exe --help
 ```
 
 ## Install
@@ -38,16 +38,16 @@ If you need a single executable (e.g., `kc.exe`) that does not require Python to
    The executable will be created at `dist/kc.exe`.
 6. (Optional) Build the fixed entrypoint:
    ```powershell
-   pyinstaller --onefile --console src/kc/roles_create_fixed.py --name kc-roles-create-fixed.exe
+   pyinstaller --onefile --console src/kc/roles_create_fixed.py --name kc.exe-roles-create-fixed.exe
    ```
-   The executable will be created at `dist/kc-roles-create-fixed.exe`.
+   The executable will be created at `dist/kc.exe-roles-create-fixed.exe`.
 7. Test:
    ```powershell
    cd dist
    .\kc.exe --help
    .\kc.exe --config ..\config.json realms list
    ```
-You can copy `kc.exe` (and optionally `kc-roles-create-fixed.exe`) to any Windows machine without Python.
+You can copy `kc.exe` (and optionally `kc.exe-roles-create-fixed.exe`) to any Windows machine without Python.
 
 ## Global flags
 - `--config <path>`
@@ -75,9 +75,9 @@ You can copy `kc.exe` (and optionally `kc-roles-create-fixed.exe`) to any Window
   ```
 - Run:
   ```bash
-  kc --config config.json --cmd-file commands.txt
+  kc.exe --config config.json --cmd-file commands.txt
   # or continue even if a command fails
-  kc --config config.json --cmd-file commands.txt --continue-on-error
+  kc.exe --config config.json --cmd-file commands.txt --continue-on-error
   ```
 Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the file.
 
@@ -88,28 +88,28 @@ Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the f
 ### Realms
 - **List realms**
   ```bash
-  kc realms list --jira <TICKET>
+  kc.exe realms list --jira <TICKET>
   ```
 
 ### Roles
 - **Create a role in a specific realm**
   ```bash
-  kc roles create --name <ROLE> --description "<DESCRIPTION>" --realm <REALM> --jira <TICKET>
+  kc.exe roles create --name <ROLE> --description "<DESCRIPTION>" --realm <REALM> --jira <TICKET>
   ```
 
 - **Create a role using the default realm**
   ```bash
-  kc roles create --name <ROLE> --description "<DESCRIPTION>" --jira <TICKET>
+  kc.exe roles create --name <ROLE> --description "<DESCRIPTION>" --jira <TICKET>
   ```
 
 - **Create a role in all realms**
   ```bash
-  kc roles create --name <ROLE> --description "<DESCRIPTION>" --jira <TICKET> --all-realms
+  kc.exe roles create --name <ROLE> --description "<DESCRIPTION>" --jira <TICKET> --all-realms
   ```
 
  - **Create multiple roles with a single description (applied to all)**
    ```bash
-   kc roles create \
+   kc.exe roles create \
      --realm myrealm \
      --name admin \
      --name operator \
@@ -120,7 +120,7 @@ Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the f
 
  - **Create multiple roles with per-role descriptions (ordered)**
    ```bash
-   kc roles create \
+   kc.exe roles create \
      --realm myrealm \
      --name admin --description "Full access" \
      --name operator --description "Limited operations" \
@@ -130,22 +130,22 @@ Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the f
 
  - **Create multiple roles without description**
    ```bash
-   kc roles create --realm myrealm --name viewer --name reporter --jira <TICKET>
+   kc.exe roles create --realm myrealm --name viewer --name reporter --jira <TICKET>
    ```
 
  - **Create multiple roles in all realms**
    ```bash
-   kc roles create --all-realms --name viewer --name auditor --description "Global read" --jira <TICKET>
+   kc.exe roles create --all-realms --name viewer --name auditor --description "Global read" --jira <TICKET>
    ```
 
 - **Create roles interactively (realm, names, description prompted)**
   ```bash
-  kc roles create -i --jira <TICKET>
+  kc.exe roles create -i --jira <TICKET>
   ```
 
 - **Create roles interactively but forcing a specific realm from CLI**
   ```bash
-  kc roles create -i --realm myrealm --jira <TICKET>
+  kc.exe roles create -i --realm myrealm --jira <TICKET>
   # Interactive mode will not re-ask for the realm, only for role names and description.
   ```
 
@@ -167,19 +167,19 @@ Priority order when you run `roles create` (from highest to lowest):
 
 ### Fixed executable for `roles create`
 
-In addition to the main `kc` command, there is a small dedicated entrypoint that always runs a pre-configured `roles create` command:
+In addition to the main `kc.exe` command, there is a small dedicated entrypoint that always runs a pre-configured `roles create` command:
 
 - **Usage**
   ```bash
-  kc-roles-create-fixed
+  kc.exe-roles-create-fixed
   ```
 
-The exact realm, role names and other arguments executed by `kc-roles-create-fixed` are defined in code inside `src/kc/roles_create_fixed.py`. To change its behavior, edit that file.
+The exact realm, role names and other arguments executed by `kc.exe-roles-create-fixed` are defined in code inside `src/kc/roles_create_fixed.py`. To change its behavior, edit that file.
 
 #### Edit roles: `roles update`
 - **Update the description of multiple roles in a realm**
   ```bash
-  kc roles update --realm myrealm \
+  kc.exe roles update --realm myrealm \
     --name admin --name operator \
     --description "New description" \
     --jira <TICKET>
@@ -187,7 +187,7 @@ The exact realm, role names and other arguments executed by `kc-roles-create-fix
 
 - **Rename roles by order in multiple realms**
   ```bash
-  kc roles update \
+  kc.exe roles update \
     --realm myrealm --realm sandbox \
     --name viewer --new-name read_only \
     --name auditor --new-name audit_read \
@@ -205,7 +205,7 @@ Flags for `roles update`:
 #### Delete roles: `roles delete`
 - **Delete roles in all realms (skipping non-existent ones)**
   ```bash
-  kc roles delete --all-realms \
+  kc.exe roles delete --all-realms \
     --name temp_role --name deprecated_role \
     --ignore-missing \
     --jira <TICKET>
@@ -220,7 +220,7 @@ Flags for `roles delete`:
 ### Client Roles
 - **Create a client role in a specific client and realm**
   ```bash
-  kc client-roles create \
+  kc.exe client-roles create \
     --client-id my-app \
     --name app-admin \
     --description "Admin role for my-app" \
@@ -230,7 +230,7 @@ Flags for `roles delete`:
 
 - **Create multiple client roles with a single description (applied to all)**
   ```bash
-  kc client-roles create \
+  kc.exe client-roles create \
     --client-id my-app \
     --realm myrealm \
     --name app-admin \
@@ -241,7 +241,7 @@ Flags for `roles delete`:
 
 - **Create multiple client roles in all realms**
   ```bash
-  kc client-roles create \
+  kc.exe client-roles create \
     --client-id my-app \
     --all-realms \
     --name app-admin \
@@ -263,7 +263,7 @@ Flags for `roles delete`:
 ### Users
 - **Create multiple users in a realm with a single password**
   ```bash
-  kc users create \
+  kc.exe users create \
     --realm myrealm \
     --username jdoe --username mjane \
     --password Str0ng! \
@@ -275,7 +275,7 @@ Flags for `roles delete`:
 
 - **Create users with per-user passwords and realm roles**
   ```bash
-  kc users create \
+  kc.exe users create \
     --realm myrealm \
     --username a --password Aa!1 --email a@acme.com \
     --username b --password Bb!2 --email b@acme.com \
@@ -285,7 +285,7 @@ Flags for `roles delete`:
 
 - **Create users in all realms, without email (emailVerified=false)**
   ```bash
-  kc users create \
+  kc.exe users create \
     --all-realms \
     --username svc-1 --username svc-2 \
     --enabled=false \
@@ -294,7 +294,7 @@ Flags for `roles delete`:
 
 - **Create users in multiple specific realms**
   ```bash
-  kc users create \
+  kc.exe users create \
     --realm myrealm --realm sandbox \
     --username test1 --password Test!123 \
     --jira <TICKET>
@@ -316,7 +316,7 @@ Flags for `roles delete`:
 #### Edit users: `users update`
 - **Update password and enable multiple users**
   ```bash
-  kc users update \
+  kc.exe users update \
     --realm myrealm \
     --username jdoe --username mjane \
     --password N3wP@ss! \
@@ -326,7 +326,7 @@ Flags for `roles delete`:
 
 - **Update fields per user (ordered)**
   ```bash
-  kc users update \
+  kc.exe users update \
     --realm myrealm \
     --username a --email a@acme.com --first-name Ann --last-name A \
     --username b --email b@acme.com --first-name Ben --last-name B \
@@ -347,7 +347,7 @@ Flags for `users update`:
 #### Delete users: `users delete`
 - **Delete users in multiple realms, ignoring non-existent ones**
   ```bash
-  kc users delete \
+  kc.exe users delete \
     --realm myrealm --realm sandbox \
     --username olduser1 --username olduser2 \
     --ignore-missing \
@@ -363,7 +363,7 @@ Flags for `users delete`:
 ### Clients
 - **Create client(s)**
   ```bash
-  kc clients create \
+  kc.exe clients create \
     --realm myrealm \
     --client-id app-frontend \
     --name "App Frontend" \
@@ -375,7 +375,7 @@ Flags for `users delete`:
 
 - **Update client(s)**
   ```bash
-  kc clients update \
+  kc.exe clients update \
     --realm myrealm \
     --client-id app-frontend \
     --name "App Frontend v2" \
@@ -386,12 +386,12 @@ Flags for `users delete`:
 
 - **Delete client(s)**
   ```bash
-  kc clients delete --realm myrealm --client-id app-frontend --ignore-missing --jira <TICKET>
+  kc.exe clients delete --realm myrealm --client-id app-frontend --ignore-missing --jira <TICKET>
   ```
 
 - **List clients**
   ```bash
-  kc clients list --realm myrealm --jira <TICKET>
+  kc.exe clients list --realm myrealm --jira <TICKET>
   ```
 
 Flags para `clients` (principales):
@@ -409,7 +409,7 @@ Nota:
 #### Asignar scopes a un client
 - **Asignar scopes**
   ```bash
-  kc clients scopes assign \
+  kc.exe clients scopes assign \
     --realm myrealm \
     --client-id app-frontend \
     --type default \
@@ -419,7 +419,7 @@ Nota:
 
 - **Remover scopes**
   ```bash
-  kc clients scopes remove \
+  kc.exe clients scopes remove \
     --realm myrealm \
     --client-id app-frontend \
     --type optional \
@@ -437,7 +437,7 @@ Flags:
 ### Client Scopes
 - **Crear client scopes**
   ```bash
-  kc client-scopes create \
+  kc.exe client-scopes create \
     --realm myrealm \
     --name profile --description "Standard profile" --protocol openid-connect \
     --jira <TICKET>
@@ -445,7 +445,7 @@ Flags:
 
 - **Actualizar client scopes**
   ```bash
-  kc client-scopes update \
+  kc.exe client-scopes update \
     --realm myrealm \
     --name profile --new-name profile_v2 --description "Updated" \
     --jira <TICKET>
@@ -453,12 +453,12 @@ Flags:
 
 - **Eliminar client scopes**
   ```bash
-  kc client-scopes delete --realm myrealm --name profile --ignore-missing --jira <TICKET>
+  kc.exe client-scopes delete --realm myrealm --name profile --ignore-missing --jira <TICKET>
   ```
 
 - **Listar client scopes**
   ```bash
-  kc client-scopes list --realm myrealm --jira <TICKET>
+  kc.exe client-scopes list --realm myrealm --jira <TICKET>
   ```
 
 Flags para `client-scopes`:
