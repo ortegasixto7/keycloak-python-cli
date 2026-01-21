@@ -18,6 +18,37 @@ From the repo root:
 python -m pip install -e .
 ```
 
+### Build standalone executables (Windows)
+If you need a single executable (e.g., `kc.exe`) that does not require Python to be installed, use PyInstaller on Windows.
+
+1. Install Python 3.9+ on Windows (from python.org or via winget).
+2. Clone the repo and open a terminal (PowerShell/CMD) in the repo root.
+3. Install the project in editable mode:
+   ```powershell
+   pip install -e .
+   ```
+4. Install PyInstaller:
+   ```powershell
+   pip install pyinstaller
+   ```
+5. Build the main executable:
+   ```powershell
+   pyinstaller --onefile --console src/kc/cli.py --name kc.exe
+   ```
+   The executable will be created at `dist/kc.exe`.
+6. (Optional) Build the fixed entrypoint:
+   ```powershell
+   pyinstaller --onefile --console src/kc/roles_create_fixed.py --name kc-roles-create-fixed.exe
+   ```
+   The executable will be created at `dist/kc-roles-create-fixed.exe`.
+7. Test:
+   ```powershell
+   cd dist
+   .\kc.exe --help
+   .\kc.exe --config ..\config.json realms list
+   ```
+You can copy `kc.exe` (and optionally `kc-roles-create-fixed.exe`) to any Windows machine without Python.
+
 ## Global flags
 - `--config <path>`
   Configuration file (default: `config.json` next to the executable (when packaged) or in the current directory).
