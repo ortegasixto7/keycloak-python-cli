@@ -1,0 +1,4 @@
+commands:
+  - realms list
+  - cmd: "roles create --realm master --name yaml_role --description 'Created from YAML'"
+  - roles delete --realm master --name yaml_role --ignore-missing

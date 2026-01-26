@@ -1,0 +1,7 @@
+{
+  "commands": [
+    "realms list",
+    { "cmd": "roles create --realm master --name json_role --description 'Created from JSON'" },
+    "roles delete --realm master --name json_role --ignore-missing"
+  ]
+}

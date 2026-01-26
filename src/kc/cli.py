@@ -1,9 +1,11 @@
+import json
 import shlex
 import subprocess
 import sys
 from pathlib import Path
 
 import typer
+import yaml
 
 from kc.core.runtime import Runtime
 from kc.commands.realms import realms_app
@@ -83,11 +85,37 @@ def _run_cmd_file(cmd_file: str, base_flags: dict, continue_on_error: bool) -> N
     if base_flags.get("jira"):
         base_parts.extend(["--jira", base_flags["jira"]])
 
-    with path.open("r", encoding="utf-8") as f:
-        lines = f.readlines()
+    ext = path.suffix.lower()
+    commands = []
 
-    for raw_line in lines:
-        line = raw_line.strip()
+    if ext == ".json":
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, list):
+                commands = data
+            elif isinstance(data, dict) and "commands" in data:
+                commands = data["commands"]
+    elif ext in [".yaml", ".yml"]:
+        with path.open("r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            if isinstance(data, list):
+                commands = data
+            elif isinstance(data, dict) and "commands" in data:
+                commands = data["commands"]
+    else:
+        # Fallback to plain text
+        with path.open("r", encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.strip()
+                if line and not line.startswith("#"):
+                    commands.append(line)
+
+    for cmd in commands:
+        if isinstance(cmd, dict):
+            line = cmd.get("cmd", "")
+        else:
+            line = str(cmd).strip()
+
         if not line or line.startswith("#"):
             continue
 

@@ -64,22 +64,48 @@ You can copy `kc.exe` (and optionally `kc.exe-roles-create-fixed.exe`) to any Wi
   When used with `--cmd-file`, continue processing remaining lines even if a command fails (default: stop on first error).
 
 ### Batch execution from file
-- Example file `commands.txt`:
+The CLI supports executing multiple commands from a single file in **Plain Text**, **JSON**, or **YAML** formats.
+
+#### Plain Text format (`.txt`)
+- One CLI command per line.
+- Lines starting with `#` are ignored.
+- Example `commands.txt`:
   ```text
   # List realms
   realms list
+  roles create --realm master --name example_role --description "Example role"
+  ```
 
-  # Create then delete a role
-  roles create --realm master --name example_role --description "Example role from batch"
-  roles delete --realm master --name example_role --ignore-missing
+#### JSON format (`.json`)
+- Can be a simple list of strings or an object with a `commands` key.
+- Example `commands.json`:
+  ```json
+  {
+    "commands": [
+      "realms list",
+      "users create --realm master --username jdoe --password Str0ng! --email jdoe@acme.com",
+      { "cmd": "roles create --realm master --name json_role --description 'Created from JSON'" }
+    ]
+  }
   ```
-- Run:
-  ```bash
-  kc.exe --config config.json --cmd-file commands.txt
-  # or continue even if a command fails
-  kc.exe --config config.json --cmd-file commands.txt --continue-on-error
+
+#### YAML format (`.yaml` / `.yml`)
+- Can be a simple list of strings or an object with a `commands` key.
+- Example `commands.yaml`:
+  ```yaml
+  commands:
+    - realms list
+    - "users create --realm master --username msmith --password Str0ng! --email msmith@acme.com"
+    - cmd: "roles create --realm master --name yaml_role --description 'Created from YAML'"
   ```
-Global flags like `--realm`, `--log-file`, `--jira` apply to every line in the file.
+
+#### Run:
+```bash
+kc.exe --config config.json --cmd-file commands.json
+# or continue even if a command fails
+kc.exe --config config.json --cmd-file commands.yaml --continue-on-error
+```
+Global flags like `--realm`, `--log-file`, `--jira` apply to every command in the file.
 
 ## Commands and examples
 
