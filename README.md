@@ -29,11 +29,11 @@ If you need a single executable (e.g., `kc.exe`) that does not require Python to
    ```
 4. Install PyInstaller:
    ```powershell
-   pip install pyinstaller
+   python -m pip install pyinstaller
    ```
 5. Build the main executable:
    ```powershell
-   pyinstaller --onefile --console src/kc/cli.py --name kc.exe
+   python -m PyInstaller --onefile --console src/kc/cli.py --name kc.exe
    ```
    The executable will be created at `dist/kc.exe`.
 6. (Optional) Build the fixed entrypoint:
