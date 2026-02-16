@@ -65,7 +65,12 @@ class _TeeWriter:
         self._b = b
 
     def write(self, s: str) -> int:
-        na = self._a.write(s)
+        try:
+            na = self._a.write(s)
+        except UnicodeEncodeError:
+            enc = getattr(self._a, "encoding", None) or "cp1252"
+            s_safe = s.encode(enc, errors="replace").decode(enc, errors="replace")
+            na = self._a.write(s_safe)
         self._b.write(s)
         return na
 

@@ -75,6 +75,16 @@ def main() -> None:
         raise
 
 
+def _cmd_file_argv0() -> list[str]:
+    """Return the executable + args to re-invoke this CLI (for --cmd-file subprocesses)."""
+    if getattr(sys, "frozen", False):
+        return [sys.argv[0]]
+    base = Path(sys.argv[0]).name.lower()
+    if base in ("kc", "kc.exe"):
+        return [sys.argv[0]]
+    return [sys.executable, "-m", "kc"]
+
+
 def _run_cmd_file(cmd_file: str, base_flags: dict, continue_on_error: bool) -> None:
     path = Path(cmd_file)
     if not path.exists():
@@ -115,6 +125,7 @@ def _run_cmd_file(cmd_file: str, base_flags: dict, continue_on_error: bool) -> N
                 if line and not line.startswith("#"):
                     commands.append(line)
 
+    argv0 = _cmd_file_argv0()
     for cmd in commands:
         if isinstance(cmd, dict):
             line = cmd.get("cmd", "")
@@ -125,9 +136,11 @@ def _run_cmd_file(cmd_file: str, base_flags: dict, continue_on_error: bool) -> N
             continue
 
         args = shlex.split(line)
-        full_args = [sys.argv[0], *base_parts, *args]
+        full_args = [*argv0, *base_parts, *args]
 
-        proc = subprocess.run(full_args, capture_output=True, text=True)
+        proc = subprocess.run(
+            full_args, capture_output=True, text=True, encoding="utf-8", errors="replace"
+        )
         sys.stdout.write(proc.stdout)
         sys.stderr.write(proc.stderr)
 
