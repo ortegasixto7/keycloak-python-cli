@@ -420,20 +420,20 @@ Flags for `users delete`:
   kc.exe clients list --realm myrealm --jira <TICKET>
   ```
 
-Flags para `clients` (principales):
-- `--client-id <ID>` Repeatable en create/update/delete. Requerido para create/update/delete.
+Flags for `clients` (main):
+- `--client-id <ID>` Repeatable in create/update/delete. Required for create/update/delete.
 - `--name`, `--public`, `--enabled`, `--protocol`, `--root-url`, `--base-url`.
-- `--redirect-uri`, `--web-origin` (lista aplicada a todos los seleccionados cuando se usa en update/create).
+- `--redirect-uri`, `--web-origin` (list applied to all selected when used in update/create).
 - `--standard-flow`, `--direct-access`, `--implicit-flow`, `--service-accounts` (bool 0/1/N).
-- `--new-client-id` para renombrar en `update` (0/1/N).
-- `--realm` (0/1/N) o `--all-realms`.
-- `--ignore-missing` en `update/delete` para omitir inexistentes.
+- `--new-client-id` to rename in `update` (0/1/N).
+- `--realm` (0/1/N) or `--all-realms`.
+- `--ignore-missing` in `update/delete` to skip non-existent ones.
 
-Nota:
-- El seteo explícito de `--secret` no está soportado; el comando emitirá un warning y lo omitirá.
+Note:
+- Explicit setting of `--secret` is not supported; the command will emit a warning and omit it.
 
-#### Asignar scopes a un client
-- **Asignar scopes**
+#### Assign scopes to a client
+- **Assign scopes**
   ```bash
   kc.exe clients scopes assign \
     --realm myrealm \
@@ -443,7 +443,7 @@ Nota:
     --jira <TICKET>
   ```
 
-- **Remover scopes**
+- **Remove scopes**
   ```bash
   kc.exe clients scopes remove \
     --realm myrealm \
@@ -454,14 +454,14 @@ Nota:
   ```
 
 Flags:
-- `--client-id <ID>` Requerido.
-- `--scope <NAME>` Repeatable. Requerido.
+- `--client-id <ID>` Required.
+- `--scope <NAME>` Repeatable. Required.
 - `--type default|optional` (default: `default`).
-- `--realm` requerido (o global), o `--all-realms` en assign/remove si deseas aplicar a múltiples realms.
-- `--ignore-missing` en remove para omitir scopes no asignados.
+- `--realm` required (or global), or `--all-realms` in assign/remove if you want to apply to multiple realms.
+- `--ignore-missing` in remove to skip unassigned scopes.
 
 ### Client Scopes
-- **Crear client scopes**
+- **Create client scopes**
   ```bash
   kc.exe client-scopes create \
     --realm myrealm \
@@ -469,7 +469,7 @@ Flags:
     --jira <TICKET>
   ```
 
-- **Actualizar client scopes**
+- **Update client scopes**
   ```bash
   kc.exe client-scopes update \
     --realm myrealm \
@@ -477,23 +477,23 @@ Flags:
     --jira <TICKET>
   ```
 
-- **Eliminar client scopes**
+- **Delete client scopes**
   ```bash
   kc.exe client-scopes delete --realm myrealm --name profile --ignore-missing --jira <TICKET>
   ```
 
-- **Listar client scopes**
+- **List client scopes**
   ```bash
   kc.exe client-scopes list --realm myrealm --jira <TICKET>
   ```
 
-Flags para `client-scopes`:
-- `--name <NAME>` Repeatable. Requerido en create/update/delete.
-- `--description`, `--protocol` (0/1/N). `protocol` por defecto: `openid-connect`.
-- `--new-name` en update (0/1/N).
-- `--realm` o `--all-realms`.
-- `--ignore-missing` en update/delete para omitir inexistentes.
+Flags for `client-scopes`:
+- `--name <NAME>` Repeatable. Required in create/update/delete.
+- `--description`, `--protocol` (0/1/N). Default `protocol`: `openid-connect`.
+- `--new-name` in update (0/1/N).
+- `--realm` or `--all-realms`.
+- `--ignore-missing` in update/delete to skip non-existent ones.
 
 ## Logging
-- Toda la salida estándar y de error se duplica en `kc.log` (en el directorio de ejecución o según `--log-file`).
-- Cada comando imprime marcas de tiempo `START`/`END` y errores con su duración.
+- All standard output and error are duplicated to `kc.log` (in the execution directory or as per `--log-file`).
+- Each command prints `START`/`END` timestamps and errors with their duration.
