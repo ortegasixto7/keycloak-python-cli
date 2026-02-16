@@ -19,7 +19,9 @@ def render_box(lines: List[str], jira_ticket: str, realm_label: str, title: str 
 def print_box(lines: List[str], jira_ticket: str, realm_label: str, title: str = "Keycloak CLI") -> None:
     import sys
 
-    sys.stdout.write(render_box(lines, jira_ticket=jira_ticket, realm_label=realm_label, title=title) + "\n")
+    text = render_box(lines, jira_ticket=jira_ticket, realm_label=realm_label, title=title) + "\n"
+    sys.stdout.write(text)
+    sys.stdout.flush()
 
 
 def _build_header_text(*, jira_ticket: str, realm_label: str, title: str) -> str:

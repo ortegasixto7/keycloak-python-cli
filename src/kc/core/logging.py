@@ -5,6 +5,10 @@ import sys
 from typing import Optional, TextIO
 
 
+def _is_frozen() -> bool:
+    return getattr(sys, "frozen", False)
+
+
 class Tee:
     def __init__(self, log_file: str):
         self.log_file = log_file or "kc.log"
@@ -14,27 +18,40 @@ class Tee:
 
     def install(self) -> None:
         self._fh = open(self.log_file, "a", encoding="utf-8")
+        if _is_frozen():
+            # Do not replace stdout/stderr when frozen (PyInstaller exe), so console
+            # output is visible. Log file is still written via err()/out().
+            return
         self._orig_stdout = sys.stdout
         self._orig_stderr = sys.stderr
         sys.stdout = _TeeWriter(self._orig_stdout, self._fh)
         sys.stderr = _TeeWriter(self._orig_stderr, self._fh)
 
     def out(self, s: str) -> None:
-        sys.stdout.write(s)
+        if _is_frozen() and self._fh:
+            self._fh.write(s)
+            self._fh.flush()
+        else:
+            sys.stdout.write(s)
 
     def err(self, s: str) -> None:
-        sys.stderr.write(s)
+        if _is_frozen() and self._fh:
+            self._fh.write(s)
+            self._fh.flush()
+        else:
+            sys.stderr.write(s)
 
     def close(self) -> None:
-        try:
-            sys.stdout.flush()
-            sys.stderr.flush()
-        except Exception:
-            pass
-        if self._orig_stdout is not None:
-            sys.stdout = self._orig_stdout
-        if self._orig_stderr is not None:
-            sys.stderr = self._orig_stderr
+        if not _is_frozen():
+            try:
+                sys.stdout.flush()
+                sys.stderr.flush()
+            except Exception:
+                pass
+            if self._orig_stdout is not None:
+                sys.stdout = self._orig_stdout
+            if self._orig_stderr is not None:
+                sys.stderr = self._orig_stderr
         if self._fh is not None:
             try:
                 self._fh.close()

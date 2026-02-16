@@ -58,6 +58,11 @@ def main_callback(
 def main() -> None:
     from kc.core.runtime import CURRENT_RUNTIME
 
+    if getattr(sys, "frozen", False):
+        try:
+            Path("kc_exe_debug.txt").write_text("started\n", encoding="utf-8")
+        except Exception:
+            pass
     try:
         app()
         rt = CURRENT_RUNTIME
@@ -136,3 +141,8 @@ app.add_typer(client_roles_app, name="client-roles")
 app.add_typer(users_app, name="users")
 app.add_typer(clients_app, name="clients")
 app.add_typer(client_scopes_app, name="client-scopes")
+
+
+if __name__ == "__main__":
+    main()
+
