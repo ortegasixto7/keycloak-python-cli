@@ -77,27 +77,46 @@ The CLI supports executing multiple commands from a single file in **Plain Text*
   ```
 
 #### JSON format (`.json`)
-- Can be a simple list of strings or an object with a `commands` key.
-- Example `commands.json`:
-  ```json
-  {
-    "commands": [
-      "realms list",
-      "users create --realm master --username jdoe --password Str0ng! --email jdoe@acme.com",
-      { "cmd": "roles create --realm master --name json_role --description 'Created from JSON'" }
-    ]
-  }
-  ```
+The CLI supports two JSON structures:
+
+**Option A: Simple List**
+```json
+[
+  "realms list",
+  "roles create --name role_one",
+  { "cmd": "users create --username juan" }
+]
+```
+
+**Option B: Object with `commands` key**
+```json
+{
+  "commands": [
+    "realms list",
+    "roles create --name role_two",
+    { "cmd": "roles create --name expert_role" }
+  ]
+}
+```
 
 #### YAML format (`.yaml` / `.yml`)
-- Can be a simple list of strings or an object with a `commands` key.
-- Example `commands.yaml`:
-  ```yaml
-  commands:
-    - realms list
-    - "users create --realm master --username msmith --password Str0ng! --email msmith@acme.com"
-    - cmd: "roles create --realm master --name yaml_role --description 'Created from YAML'"
-  ```
+Similarly, YAML supports two structures:
+
+**Option A: Simple List**
+```yaml
+- realms list
+- "roles create --name role_yaml"
+- cmd: "users create --username pedro"
+```
+
+**Option B: Object with `commands` key**
+```yaml
+commands:
+  - realms list
+  - "users create --realm master --username msmith"
+  - cmd: "roles create --name yaml_role"
+```
+
 
 #### Run:
 ```bash
